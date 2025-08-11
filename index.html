@@ -9,11 +9,25 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'YOUR_PIXEL_ID');
+        fbq('track', 'PageView');
+        fbq('trackCustom', 'UpsellPageView', {
+            value: 47,
+            currency: 'EUR'
+        });
+    </script>
+    
     <style>
-        /* =============================================
-           PÁGINA DE UPSELL "O NOCAUTE" - VERSÃO COMPLETA
-           ============================================= */
-
         /* VARIÁVEIS GLOBAIS */
         :root {
             --midnight-blue: #191970;
@@ -66,7 +80,9 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.05);
         }
 
-        /* BLOCO 1: ALERTA INICIAL */
+        /* =============================================
+           BLOCO 1: ALERTA INICIAL
+           ============================================= */
         .alert-section {
             text-align: center;
             margin-bottom: 40px;
@@ -118,7 +134,9 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* BLOCO 2: VÍDEO VSL */
+        /* =============================================
+           BLOCO 2: VÍDEO VSL
+           ============================================= */
         .video-section {
             margin-bottom: 50px;
             position: relative;
@@ -185,11 +203,15 @@
             font-size: 20px;
         }
 
-        /* BLOCO 3: CTA - ÁREA DE DECISÃO */
+        /* =============================================
+           BLOCO 3: CTA - ÁREA DE DECISÃO COM WIDGET HOTMART
+           ============================================= */
         .cta-section {
             text-align: center;
-            padding: 50px 20px 30px;
-            margin-top: -20px; /* Aproxima do vídeo */
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--papyrus-white), var(--pure-white));
+            border-radius: 20px;
+            margin-top: 30px;
             display: none; /* Inicialmente oculto */
             opacity: 0;
             transition: opacity 1s ease;
@@ -201,92 +223,169 @@
             opacity: 1;
         }
 
-        /* 1. BOTÃO PRINCIPAL "SIM" - Formato Grande e Chamativo */
-        .yes-button {
+        /* Container personalizado para o widget da Hotmart */
+        .hotmart-widget-container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+            border: 3px solid var(--satin-gold);
+        }
+
+        .hotmart-widget-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--satin-gold), var(--dark-gold));
+        }
+
+        .widget-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .widget-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--midnight-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .widget-subtitle {
+            font-size: 16px;
+            color: var(--graphite-gray);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .price-highlight {
+            background: linear-gradient(135deg, var(--satin-gold), var(--dark-gold));
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(205,164,52,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: goldPulse 2s infinite;
+        }
+
+        /* Estilos para customizar o widget da Hotmart */
+        #hotmart-sales-funnel {
+            position: relative;
+            z-index: 10;
+            min-height: 200px;
+        }
+
+        /* Loading state para o widget */
+        .widget-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            color: var(--graphite-gray);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--papyrus-white);
+            border-top: 4px solid var(--satin-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Fallback button quando widget não carrega */
+        .fallback-button {
             display: inline-block;
             width: 100%;
-            max-width: 750px;
-            padding: 28px 45px;
-            background: linear-gradient(135deg, #B8860B, #9A7209); /* Ouro Acetinado */
+            max-width: 600px;
+            padding: 25px 40px;
+            background: linear-gradient(135deg, var(--satin-gold), var(--dark-gold));
             color: white;
             text-decoration: none;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 700;
             font-family: 'Montserrat', sans-serif;
-            line-height: 1.4;
-            border-radius: 8px;
-            box-shadow: 
-                0 20px 40px rgba(184, 134, 11, 0.35),
-                0 10px 20px rgba(184, 134, 11, 0.25),
-                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            box-shadow: 0 15px 40px rgba(205,164,52,0.4);
             transition: all 0.3s ease;
-            margin-bottom: 35px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            border: 2px solid #8A6E09;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: none;
         }
 
-        /* Efeito de brilho no hover */
-        .yes-button::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.2) 50%,
-                transparent 70%
-            );
-            transform: rotate(45deg) translateX(-100%);
-            transition: transform 0.6s;
+        .fallback-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(205,164,52,0.5);
         }
 
-        .yes-button:hover::before {
-            transform: rotate(45deg) translateX(100%);
-        }
-
-        .yes-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                0 25px 50px rgba(184, 134, 11, 0.4),
-                0 15px 30px rgba(184, 134, 11, 0.3);
-            background: linear-gradient(135deg, #CDA434, #B8860B);
-        }
-
-        .yes-button:active {
-            transform: translateY(0);
-            box-shadow: 
-                0 10px 20px rgba(184, 134, 11, 0.3),
-                0 5px 10px rgba(184, 134, 11, 0.2);
-        }
-
-        /* 2. LINK DE RECUSA "NÃO" - Texto Simples e Discreto */
+        /* Link NÃO - Caminho de Fuga (Minimalista) */
         .no-link {
             display: inline-block;
-            color: #3A3A3A; /* Cinza Grafite */
+            color: var(--graphite-gray);
             font-size: 14px;
-            font-family: 'Lato', sans-serif;
             text-decoration: underline;
-            text-underline-offset: 3px;
             font-weight: 400;
-            opacity: 0.8;
-            transition: all 0.3s ease;
+            margin-top: 30px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
             cursor: pointer;
-            margin-top: 0;
         }
 
         .no-link:hover {
             opacity: 1;
-            color: #666666;
-            text-decoration-color: #999999;
+            color: var(--danger-red);
         }
 
-        /* FOOTER MINIMALISTA */
+        /* Texto de Escassez */
+        .scarcity-text {
+            margin: 20px 0 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFF3CD, #FFEAA7);
+            border-left: 6px solid var(--satin-gold);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #856404;
+            animation: fadeIn 1s forwards;
+            box-shadow: 0 10px 30px rgba(205,164,52,0.2);
+        }
+
+        .timer {
+            color: var(--danger-red);
+            font-weight: 900;
+            font-size: 22px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* =============================================
+           BLOCO 4: FOOTER MINIMALISTA
+           ============================================= */
         footer {
             margin-top: 80px;
             padding: 30px 20px;
@@ -322,7 +421,9 @@
             color: var(--satin-gold);
         }
 
-        /* LOADING OVERLAY */
+        /* =============================================
+           LOADING OVERLAY
+           ============================================= */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -352,7 +453,9 @@
             animation: spin 1s linear infinite;
         }
 
-        /* ANIMAÇÕES */
+        /* =============================================
+           ANIMAÇÕES
+           ============================================= */
         @keyframes fadeInDown {
             from {
                 opacity: 0;
@@ -367,6 +470,17 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideInUp {
@@ -401,7 +515,20 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* RESPONSIVO */
+        @keyframes goldPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 15px 40px rgba(205,164,52,0.4);
+            }
+            50% { 
+                transform: scale(1.02);
+                box-shadow: 0 20px 50px rgba(205,164,52,0.6);
+            }
+        }
+
+        /* =============================================
+           RESPONSIVO
+           ============================================= */
         @media (max-width: 768px) {
             .container {
                 padding: 30px 15px;
@@ -415,13 +542,36 @@
                 font-size: 16px;
             }
             
-            .yes-button {
+            .hotmart-widget-container {
+                margin: 20px 10px;
+                padding: 30px 20px;
+            }
+
+            .widget-title {
+                font-size: 26px;
+            }
+
+            .price-highlight {
+                font-size: 24px;
+                padding: 18px 32px;
+            }
+            
+            .fallback-button {
                 font-size: 16px;
                 padding: 20px 30px;
             }
             
             .no-link {
                 font-size: 13px;
+            }
+            
+            .scarcity-text {
+                font-size: 16px;
+                padding: 16px;
+            }
+            
+            .timer {
+                font-size: 18px;
             }
         }
 
@@ -434,7 +584,21 @@
                 font-size: 14px;
             }
             
-            .yes-button {
+            .hotmart-widget-container {
+                padding: 25px 15px;
+                margin: 15px 5px;
+            }
+
+            .widget-title {
+                font-size: 22px;
+            }
+
+            .price-highlight {
+                font-size: 20px;
+                padding: 15px 25px;
+            }
+            
+            .fallback-button {
                 font-size: 14px;
                 padding: 18px 25px;
             }
@@ -487,6 +651,8 @@
                     <!-- Placeholder do Vídeo -->
                     <div class="video-text">
                         [Insérer ici le code VTurb/Vimeo du VSL "O Nocaute"]
+                        <br><br>
+                        <small style="opacity: 0.7;">Le widget de commande apparaîtra après la vidéo</small>
                     </div>
                     
                     <!-- EXEMPLO DE INTEGRAÇÃO VTURB -->
@@ -500,29 +666,44 @@
                             allow="autoplay; fullscreen"
                             allowfullscreen>
                     </iframe>
-                    -->
+                </body>
+</html>
                 </div>
             </div>
         </section>
         
-        <!-- BLOCO 3: CTA - ÁREA DE DECISÃO (Aparece abaixo do vídeo em momento específico) -->
+        <!-- BLOCO 3: CTA - ÁREA DE DECISÃO COM WIDGET HOTMART (Aparece após 16 minutos) -->
         <section class="cta-section" id="ctaSection">
+            <!-- Texto de Escassez -->
+            <div class="scarcity-text">
+                ⚠️ Cette offre exclusive expire dans : <span class="timer" id="countdown">14:59</span>
+            </div>
             
-            <!-- 1. BOTÃO DE AÇÃO PRINCIPAL ("SIM") -->
-            <a href="https://pay.hotmart.com/C101267781G?src=checkout_1click"
-               class="yes-button"
-               onclick="return trackUpsellAccept()"
-               id="yesButton">
-                OUI ! Je profite de cette offre unique et j'ajoute le Protocole complet à ma commande pour seulement 47€
-            </a>
+            <!-- WIDGET CONTAINER PERSONALIZADO -->
+            <div class="hotmart-widget-container">
+                <div class="widget-header">
+                    <h3 class="widget-title">Offre Spéciale Limitée</h3>
+                    <p class="widget-subtitle">Protocole Complet - Accès immédiat</p>
+                    <div class="price-highlight">Seulement 47€</div>
+                </div>
+                
+                <!-- WIDGET HOTMART -->
+                <div id="hotmart-sales-funnel">
+                    <!-- Loading state -->
+                    <div class="widget-loading" id="widget-loading">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Chargement du module de commande sécurisé...</p>
+                    </div>
+                </div>
+            </div>
             
-            <!-- 2. LINK DE RECUSA ("NÃO") -->
+            <!-- Link NÃO - Caminho de Fuga -->
             <a href="https://bienvenue.elanvital.site" 
                class="no-link"
-               onclick="return trackUpsellReject()">
+               onclick="trackUpsellReject()"
+               target="_self">
                 Non, merci. Je refuse cette offre unique et je comprends que je ne la verrai plus jamais.
             </a>
-            
         </section>
         
     </div>
@@ -537,35 +718,37 @@
         <p>© 2025 Élan Vital. Tous droits réservés.</p>
     </footer>
 
+    <!-- Scripts JavaScript -->
+    <!-- Hotmart Checkout Elements -->
+    <script src="https://checkout.hotmart.com/lib/hotmart-checkout-elements.js"></script>
+    
     <script>
         /* =============================================
-           SCRIPT COMPLETO - PÁGINA DE UPSELL
+           CONFIGURAÇÕES PRINCIPAIS
            ============================================= */
 
-        // =============================================
-        // CONFIGURAÇÕES PRINCIPAIS
-        // =============================================
-
-        // TEMPO PARA O BOTÃO APARECER (em millisegundos)
+        // TEMPO PARA O WIDGET APARECER (em millisegundos)
         const BUTTON_DELAY = 16 * 60 * 1000; // 16 minutos
         // const BUTTON_DELAY = 10 * 1000; // 10 segundos para teste
 
-        // URLs DA HOTMART - CHECKOUT 1 CLIQUE
-        const HOTMART_ACCEPT_URL = 'https://pay.hotmart.com/YOUR-UPSELL-LINK?src=checkout_1click';
-        const HOTMART_REJECT_URL = 'https://hotmart.com/thank-you-page'; // Página de boas-vindas
+        // CONFIGURAÇÕES DO COUNTDOWN
+        const COUNTDOWN_MINUTES = 14;
+        const COUNTDOWN_SECONDS = 59;
 
         // FACEBOOK PIXEL ID
         const FB_PIXEL_ID = 'YOUR_PIXEL_ID';
 
-        // =============================================
-        // VARIÁVEIS GLOBAIS
-        // =============================================
+        /* =============================================
+           VARIÁVEIS GLOBAIS
+           ============================================= */
         let ctaVisible = false;
         let exitIntentShown = false;
+        let countdownTimer = null;
+        let widgetInitialized = false;
 
-        // =============================================
-        // FUNÇÕES PRINCIPAIS
-        // =============================================
+        /* =============================================
+           FUNÇÕES PRINCIPAIS
+           ============================================= */
 
         /**
          * Mostra a seção de CTA após o tempo configurado
@@ -576,9 +759,15 @@
                 ctaSection.classList.add('visible');
                 ctaVisible = true;
                 
-                console.log('✅ Botão de compra apareceu após', BUTTON_DELAY / 10 / 60, 'minutos');
+                console.log('✅ Widget de compra apareceu após', BUTTON_DELAY / 1000 / 60, 'minutos');
                 
-                // Scroll suave até o CTA (opcional - pode comentar se não quiser)
+                // Inicializa o widget da Hotmart
+                initializeHotmartWidget();
+                
+                // Inicia countdown
+                startCountdown();
+                
+                // Scroll suave até o CTA
                 setTimeout(() => {
                     ctaSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 500);
@@ -589,6 +778,146 @@
                     currency: 'EUR'
                 });
             }
+        }
+
+        /**
+         * Inicializa o widget da Hotmart
+         */
+        function initializeHotmartWidget() {
+            if (widgetInitialized) return;
+            
+            try {
+                // Esconder o loading
+                const loadingElement = document.getElementById('widget-loading');
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
+                
+                // Inicializar o widget
+                if (typeof checkoutElements !== 'undefined') {
+                    checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel');
+                    widgetInitialized = true;
+                    console.log('✅ Widget Hotmart carregado com sucesso no upsell');
+                    
+                    // Tracking do carregamento do widget
+                    trackEvent('UpsellWidgetLoaded', {
+                        widget_type: 'hotmart_sales_funnel',
+                        value: 47,
+                        currency: 'EUR'
+                    });
+                } else {
+                    console.error('❌ checkoutElements não está disponível');
+                    showFallbackButton();
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar widget Hotmart:', error);
+                showFallbackButton();
+            }
+        }
+
+        /**
+         * Função de fallback caso o widget não carregue
+         */
+        function showFallbackButton() {
+            const widgetContainer = document.getElementById('hotmart-sales-funnel');
+            if (widgetContainer) {
+                widgetContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px 30px;">
+                        <div style="
+                            background: linear-gradient(135deg, #FFF3CD, #FFEAA7);
+                            border: 2px solid var(--satin-gold);
+                            border-radius: 15px;
+                            padding: 30px;
+                            margin-bottom: 20px;
+                        ">
+                            <h4 style="
+                                color: var(--midnight-blue);
+                                font-size: 20px;
+                                font-weight: 700;
+                                margin-bottom: 15px;
+                                font-family: 'Montserrat', sans-serif;
+                            ">
+                                Module de paiement en cours de chargement...
+                            </h4>
+                            <p style="
+                                color: var(--graphite-gray);
+                                font-size: 16px;
+                                line-height: 1.5;
+                                margin-bottom: 20px;
+                            ">
+                                Si le module ne s'affiche pas dans quelques secondes, veuillez rafraîchir la page ou contacter notre support.
+                            </p>
+                            <button onclick="location.reload()" style="
+                                background: linear-gradient(135deg, var(--satin-gold), var(--dark-gold));
+                                color: white;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                transition: transform 0.3s ease;
+                            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                🔄 Rafraîchir la page
+                            </button>
+                        </div>
+                        <p style="
+                            color: #718096; 
+                            font-size: 14px;
+                            font-style: italic;
+                        ">
+                            Module de paiement sécurisé fourni par Hotmart
+                        </p>
+                    </div>
+                `;
+                console.log('🔄 Fallback de widget não carregado ativado');
+                
+                // Track o problema de carregamento
+                trackEvent('WidgetLoadError', {
+                    error_type: 'widget_not_loaded',
+                    value: 47,
+                    currency: 'EUR'
+                });
+            }
+        }
+
+        /**
+         * Inicia o countdown timer
+         */
+        function startCountdown() {
+            let minutes = COUNTDOWN_MINUTES;
+            let seconds = COUNTDOWN_SECONDS;
+            const countdownElement = document.getElementById('countdown');
+            
+            countdownTimer = setInterval(() => {
+                seconds--;
+                if (seconds < 0) {
+                    minutes--;
+                    seconds = 59;
+                }
+                
+                if (minutes < 0) {
+                    clearInterval(countdownTimer);
+                    countdownElement.textContent = "EXPIRÉ";
+                    countdownElement.style.color = "#FF0000";
+                    countdownElement.style.fontSize = "24px";
+                    countdownElement.style.fontWeight = "900";
+                    
+                    console.log('⏰ Countdown expirou');
+                    return;
+                }
+                
+                const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                countdownElement.textContent = display;
+                
+                // Aumenta urgência nos últimos 2 minutos
+                if (minutes < 2) {
+                    countdownElement.style.fontSize = '24px';
+                    countdownElement.style.fontWeight = '900';
+                    countdownElement.parentElement.style.animation = 'goldPulse 1s infinite';
+                }
+            }, 1000);
+            
+            console.log('⏱️ Countdown iniciado:', COUNTDOWN_MINUTES + ':' + COUNTDOWN_SECONDS);
         }
 
         /**
@@ -603,12 +932,12 @@
                     soundNotice.style.display = 'none';
                 }
             }
-            console.log('🔊 Som ativado');
+            console.log('🔊 Som ativado no upsell');
         }
 
-        // =============================================
-        // TRACKING E ANALYTICS
-        // =============================================
+        /* =============================================
+           TRACKING E ANALYTICS
+           ============================================= */
 
         /**
          * Track evento genérico
@@ -628,10 +957,10 @@
         }
 
         /**
-         * Track aceitação do upsell
+         * Track aceitação do upsell (via widget)
          */
         function trackUpsellAccept() {
-            console.log('✅ Upsell aceito - 47€');
+            console.log('✅ Upsell aceito via widget - 47€');
             
             // Facebook Pixel - Purchase Event
             if (typeof fbq !== 'undefined') {
@@ -640,14 +969,15 @@
                     currency: 'EUR',
                     content_name: 'Protocole Complet',
                     content_category: 'Upsell',
-                    content_type: 'product'
+                    content_type: 'product',
+                    source: 'widget'
                 });
             }
             
             // Google Analytics - Purchase Event
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'purchase', {
-                    transaction_id: 'UPSELL_' + Date.now(),
+                    transaction_id: 'UPSELL_WIDGET_' + Date.now(),
                     value: 47,
                     currency: 'EUR',
                     items: [{
@@ -659,7 +989,7 @@
                 });
             }
             
-            return true; // Permite que o link continue
+            return true;
         }
 
         /**
@@ -677,9 +1007,9 @@
             return true; // Permite que o link continue
         }
 
-        // =============================================
-        // DETECÇÃO DO PLAYER DE VÍDEO
-        // =============================================
+        /* =============================================
+           DETECÇÃO DO PLAYER DE VÍDEO
+           ============================================= */
 
         /**
          * Inicializa o tracking do vídeo
@@ -729,57 +1059,75 @@
             console.log('⏱️ Timer de fallback configurado para', BUTTON_DELAY / 1000 / 60, 'minutos');
         }
 
-        // =============================================
-        // EXIT INTENT
-        // =============================================
+        /* =============================================
+           LISTENERS PARA EVENTOS DO WIDGET HOTMART
+           ============================================= */
+
+        /**
+         * Monitora eventos do widget da Hotmart
+         */
+        function setupHotmartEventListeners() {
+            // Listener para eventos do widget
+            window.addEventListener('message', function(event) {
+                // Verifica se é evento da Hotmart
+                if (event.origin && event.origin.includes('hotmart.com')) {
+                    const data = event.data;
+                    
+                    console.log('📱 Evento do widget Hotmart:', data);
+                    
+                    // Trata diferentes tipos de eventos
+                    switch(data.type) {
+                        case 'checkout_started':
+                            trackEvent('UpsellCheckoutStarted', {
+                                value: 47,
+                                currency: 'EUR'
+                            });
+                            break;
+                            
+                        case 'purchase_completed':
+                            trackUpsellAccept();
+                            break;
+                            
+                        case 'checkout_closed':
+                            trackEvent('UpsellCheckoutClosed', {
+                                value: 47,
+                                currency: 'EUR'
+                            });
+                            break;
+                    }
+                }
+            });
+            
+            console.log('👂 Listeners do widget Hotmart configurados');
+        }
+
+        /* =============================================
+           EXIT INTENT
+           ============================================= */
 
         /**
          * Mostra popup de exit intent
          */
-        function showExitIntent() {
+        function showExitIntent(event) {
             if (!exitIntentShown && !ctaVisible) {
                 exitIntentShown = true;
                 
                 const message = "⚠️ ATTENDEZ ! Vous êtes sur le point de manquer cette offre exclusive de 47€. Êtes-vous sûr de vouloir partir ?";
                 
-                if (!confirm(message)) {
-                    // Se clicar em Cancelar, fica na página
-                    trackEvent('ExitIntentShown', {
-                        action: 'stayed'
-                    });
-                    return false;
-                } else {
-                    trackEvent('ExitIntentShown', {
-                        action: 'left'
-                    });
-                }
+                event.preventDefault();
+                event.returnValue = message;
+                
+                trackEvent('ExitIntentShown', {
+                    action: 'triggered'
+                });
+                
+                return message;
             }
         }
 
-        /**
-         * Configura exit intent
-         */
-        function setupExitIntent() {
-            // Detecta movimento do mouse para fora da janela
-            document.addEventListener('mouseout', function(e) {
-                if (e.clientY <= 0) {
-                    showExitIntent();
-                }
-            });
-            
-            // Alerta ao tentar fechar a aba
-            window.onbeforeunload = function() {
-                if (!ctaVisible) {
-                    return "Votre offre spéciale est toujours disponible !";
-                }
-            };
-            
-            console.log('🚪 Exit intent configurado');
-        }
-
-        // =============================================
-        // PROTEÇÕES DA PÁGINA
-        // =============================================
+        /* =============================================
+           PROTEÇÕES DA PÁGINA
+           ============================================= */
 
         /**
          * Desabilita ferramentas de desenvolvedor
@@ -805,163 +1153,139 @@
             console.log('🔒 Proteções ativadas');
         }
 
-        // =============================================
-        // INICIALIZAÇÃO
-        // =============================================
+        /* =============================================
+           FUNÇÃO PARA MONITORAR CARREGAMENTO DO SCRIPT HOTMART
+           ============================================= */
+        function checkHotmartScript() {
+            if (typeof checkoutElements === 'undefined') {
+                console.log('⏳ Aguardando carregamento do script Hotmart...');
+                return false;
+            }
+            return true;
+        }
+
+        /* =============================================
+           INICIALIZAÇÃO
+           ============================================= */
 
         /**
-         * Inicializa todos os sistemas quando a página carrega
+         * Função principal de inicialização
          */
-        function init() {
-            console.log('🚀 Página de Upsell carregada');
-            console.log('⏱️ Botão aparecerá em', BUTTON_DELAY / 1000 / 60, 'minutos');
+        function initializeUpsellPage() {
+            console.log('🚀 Inicializando página de upsell...');
             
-            // Remove loading overlay após 1 segundo
+            // Remove loading overlay
             setTimeout(() => {
                 const loadingOverlay = document.getElementById('loadingOverlay');
                 if (loadingOverlay) {
                     loadingOverlay.classList.add('hidden');
+                    document.body.classList.remove('loading');
                 }
-                document.body.classList.remove('loading');
-                console.log('✅ Loading removido');
-            }, 1000);
-            
-            // Inicia tracking do vídeo
-            initVideoTracking();
+            }, 1500);
             
             // Ativa proteções
             disableDevTools();
             
-            // Configura exit intent
-            setupExitIntent();
+            // Inicializa tracking de vídeo
+            initVideoTracking();
             
-            // Track visualização da página
-            trackEvent('UpsellPageView', {
+            // Setup dos event listeners do widget Hotmart
+            setupHotmartEventListeners();
+            
+            // Exit intent
+            window.addEventListener('beforeunload', showExitIntent);
+            
+            // Mouse leave detection para desktop
+            document.addEventListener('mouseleave', function(e) {
+                if (e.clientY <= 0 && !exitIntentShown && !ctaVisible) {
+                    showExitIntent({ preventDefault: () => {} });
+                }
+            });
+            
+            // Verificar periodicamente se o script da Hotmart carregou
+            const checkInterval = setInterval(() => {
+                if (checkHotmartScript()) {
+                    clearInterval(checkInterval);
+                }
+            }, 500);
+            
+            // Fallback para carregar widget após 5 segundos se CTA já estiver visível
+            setTimeout(() => {
+                if (ctaVisible && !widgetInitialized) {
+                    initializeHotmartWidget();
+                }
+            }, 5000);
+            
+            console.log('✅ Página de upsell inicializada com sucesso');
+            console.log('⏱️ Widget aparecerá em:', BUTTON_DELAY / 1000 / 60, 'minutos');
+        }
+
+        /* =============================================
+           EVENT LISTENERS
+           ============================================= */
+
+        // Inicialização quando DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUpsellPage();
+            
+            // Track page view específico para upsell
+            trackEvent('UpsellPageLoaded', {
+                page_type: 'upsell',
                 value: 47,
                 currency: 'EUR'
             });
-            
-            // Log de diagnóstico
-            console.log('📊 Configurações da página:');
-            console.log('- Delay do CTA:', BUTTON_DELAY / 1000, 'segundos');
-            console.log('- Checkout 1-Click: Ativado');
-            console.log('- Exit intent: Ativado');
-            console.log('- Tracking: FB Pixel + GA4');
-            console.log('- Proteções: Ativadas');
-        }
+        });
 
-        // =============================================
-        // FUNÇÕES DE TESTE (DESENVOLVIMENTO)
-        // =============================================
+        // Listener para quando a página for totalmente carregada
+        window.addEventListener('load', function() {
+            console.log('📄 Página totalmente carregada');
+            
+            // Tentar inicializar widget se já passou o tempo
+            if (ctaVisible && !widgetInitialized) {
+                setTimeout(() => {
+                    initializeHotmartWidget();
+                }, 1000);
+            }
+        });
+
+        // Tratamento de erros global
+        window.addEventListener('error', function(error) {
+            console.error('❌ Erro na página:', error);
+            trackEvent('PageError', {
+                error_message: error.message,
+                error_line: error.lineno
+            });
+        });
+
+        /* =============================================
+           FUNÇÕES UTILITÁRIAS
+           ============================================= */
 
         /**
-         * Força aparição do CTA (apenas para teste)
+         * Força a exibição do CTA (função para debug)
          */
         function forceShowCTA() {
-            console.log('🧪 TESTE: Forçando aparição do CTA');
-            showCTASection();
+            if (window.location.href.includes('debug=true')) {
+                setTimeout(() => {
+                    showCTASection();
+                }, 3000);
+                console.log('🧪 Modo debug ativo - CTA será exibido em 3 segundos');
+            }
         }
 
-        // =============================================
-        // EVENT LISTENERS
-        // =============================================
+        // Ativa modo debug se necessário
+        forceShowCTA();
 
-        // Aguarda o DOM carregar completamente
-        document.addEventListener('DOMContentLoaded', init);
-
-        // Monitora visibilidade da página
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                console.log('👁️ Página oculta');
-            } else {
-                console.log('👁️ Página visível');
-            }
-        });
-
-        // Monitora scroll da página
-        let scrollTracked = {
-            25: false,
-            50: false,
-            75: false,
-            100: false
-        };
-
-        window.addEventListener('scroll', function() {
-            const scrollPercent = Math.round((window.scrollY / 
-                (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-            
-            // Track marcos de scroll
-            if (scrollPercent >= 25 && !scrollTracked[25]) {
-                scrollTracked[25] = true;
-                trackEvent('ScrollDepth', { depth: 25 });
-            }
-            if (scrollPercent >= 50 && !scrollTracked[50]) {
-                scrollTracked[50] = true;
-                trackEvent('ScrollDepth', { depth: 50 });
-            }
-            if (scrollPercent >= 75 && !scrollTracked[75]) {
-                scrollTracked[75] = true;
-                trackEvent('ScrollDepth', { depth: 75 });
-            }
-            if (scrollPercent >= 95 && !scrollTracked[100]) {
-                scrollTracked[100] = true;
-                trackEvent('ScrollDepth', { depth: 100 });
-            }
-        });
-
-        // =============================================
-        // EXPORTA FUNÇÕES PARA USO GLOBAL
-        // =============================================
-        window.upsellPage = {
-            showCTA: showCTASection,
-            activateSound: activateSound,
-            trackAccept: trackUpsellAccept,
-            trackReject: trackUpsellReject,
-            // Funções de teste (remover em produção)
-            test: {
-                forceShowCTA: forceShowCTA
-            }
-        };
-
-        // =============================================
-        // MODO DEBUG (ativar apenas em desenvolvimento)
-        // =============================================
-        const DEBUG_MODE = true; // Mudar para true para ativar modo debug
-
-        if (DEBUG_MODE) {
-            console.log('🐛 MODO DEBUG ATIVADO');
-            console.log('Funções de teste disponíveis:');
-            console.log('- upsellPage.test.forceShowCTA()');
-            
-            // Mostra CTA após 5 segundos em modo debug
-            setTimeout(() => {
-                console.log('🐛 DEBUG: Mostrando CTA automaticamente');
-                forceShowCTA();
-            }, 5000);
-        }
-
-        // =============================================
-        // FIM DO SCRIPT
-        // =============================================
-        console.log('✅ Script carregado com sucesso - Versão 1.0');
+        console.log('🎯 Script de upsell carregado - Aguardando inicialização...');
     </script>
     
-    <!-- Facebook Pixel Code -->
+    <!-- Google Analytics (Adicione seu ID) -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
     <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', 'YOUR_PIXEL_ID');
-        fbq('track', 'PageView');
-        fbq('trackCustom', 'UpsellPageView', {
-            value: 47,
-            currency: 'EUR'
-        });
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
     </script>
-</body>
-</html>
+    -->
